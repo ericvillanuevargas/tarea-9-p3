@@ -1,0 +1,57 @@
+﻿
+@page "/"
+@using Tarea_9.Data
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h4>Solicitudes creadas</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Estado de vacunacion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Datos != null && Datos.ok != false)
+                    {
+                        @foreach (var i in Datos.data)
+                        {
+                            <tr>
+                                <td>@i.Cedula</td>
+                                <td>@i.Nombre</td>
+                                <td>@i.Apellido</td>
+                                <td>@i.Telefono</td>
+                                <td>@i.Correo</td>
+                                <td>@i.Vacunacion</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            @if (Datos.ok == false)
+            {
+                <div class="alert alert-danger text-center" role="alert">
+                   No hay solicitudes registradas...
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code{
+    Consumo API = new Consumo();
+    public dynamic Datos { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Datos = API.Get("https://api-solicitud-vacunacion.herokuapp.com/api/ConsultaSolicitudesGeneral");
+    }
+}
